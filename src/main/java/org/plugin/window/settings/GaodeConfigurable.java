@@ -24,6 +24,7 @@ public class GaodeConfigurable implements Configurable {
     private JBPasswordField apiKeyField;
     private JBTextField cityCodeField;
     private JBTextField cityNameField;
+    private JBLabel keychainWarningLabel;
     private JPanel root;
 
     @Override
@@ -49,12 +50,18 @@ public class GaodeConfigurable implements Configurable {
         cityHint.setForeground(JBColor.GRAY);
         cityHint.setBorder(JBUI.Borders.empty(4, 2, 8, 0));
 
+        keychainWarningLabel = new JBLabel();
+        keychainWarningLabel.setForeground(JBColor.RED);
+        keychainWarningLabel.setBorder(JBUI.Borders.empty(4, 2, 8, 0));
+        keychainWarningLabel.setVisible(false);
+
         root = FormBuilder.createFormBuilder()
                 .addLabeledComponent("API Key：", apiKeyField)
                 .addComponent(keyHint)
                 .addLabeledComponent("城市编码：", cityCodeField)
                 .addLabeledComponent("城市名称：", cityNameField)
                 .addComponent(cityHint)
+                .addComponent(keychainWarningLabel)
                 .addComponentFillVertically(new JPanel(), 0)
                 .getPanel();
 
@@ -73,9 +80,18 @@ public class GaodeConfigurable implements Configurable {
     @Override
     public void apply() {
         GaodeSettings s = GaodeSettings.getInstance();
-        GaodeApiKeyStore.setKey(readApiKey());
+        String key = readApiKey();
+        boolean credentialStoreOk = GaodeApiKeyStore.setKey(key);
         s.setCityCode(cityCodeField.getText().trim());
         s.setCityName(cityNameField.getText().trim());
+        if (!key.isEmpty() && !credentialStoreOk) {
+            keychainWarningLabel.setText(
+                    "<html>⚠ 密钥已保存到插件配置文件，但系统钥匙串写入被拒绝（授权弹窗可能被忽略）。<br>"
+                            + "如需使用系统钥匙串：重启 IDE 后重新保存，并在弹窗中选择「始终允许」。</html>");
+            keychainWarningLabel.setVisible(true);
+        } else {
+            keychainWarningLabel.setVisible(false);
+        }
     }
 
     @Override
@@ -84,6 +100,7 @@ public class GaodeConfigurable implements Configurable {
         apiKeyField.setText(GaodeApiKeyStore.getKey());
         cityCodeField.setText(s.getCityCode());
         cityNameField.setText(s.getCityName());
+        keychainWarningLabel.setVisible(false);
     }
 
     /** 从密码框取值，用完立刻清掉临时字符数组。 */
@@ -101,6 +118,7 @@ public class GaodeConfigurable implements Configurable {
         apiKeyField = null;
         cityCodeField = null;
         cityNameField = null;
+        keychainWarningLabel = null;
         root = null;
     }
 }

@@ -41,8 +41,13 @@ public final class GaodeApiKeyStore {
         }
     }
 
-    /** 保存密钥；传入空值等同于清除。 */
-    public static void setKey(String key) {
+    /**
+     * 保存密钥；传入空值等同于清除。
+     *
+     * @return 凭据库写入是否成功（验证写回）；失败时 key 已兜底保存到设置文件，
+     *         调用方应据此提示用户授权钥匙串
+     */
+    public static boolean setKey(String key) {
         String normalized = key == null ? "" : key.trim();
         // 主存储：设置文件，保证持久化
         GaodeSettings.getInstance().setApiKey(normalized);
@@ -53,8 +58,11 @@ public final class GaodeApiKeyStore {
             } else {
                 PasswordSafe.getInstance().setPassword(attributes(), normalized);
             }
+            // 验证写回：授权被拒绝时这里会拿到 null，从而暴露“静默失败”
+            String back = PasswordSafe.getInstance().getPassword(attributes());
+            return normalized.isEmpty() || (back != null && back.equals(normalized));
         } catch (Throwable ignored) {
-            // 凭据库不可用（如钥匙串未授权）时静默忽略
+            return false;
         }
     }
 }
