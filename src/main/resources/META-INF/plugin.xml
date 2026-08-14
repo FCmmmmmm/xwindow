@@ -1,0 +1,53 @@
+<idea-plugin>
+    <id>org.plugin.window</id>
+    <name>工具箱</name>
+    <vendor email="support@example.com" url="http://www.example.com">Example Inc.</vendor>
+
+    <description><![CDATA[
+      这是一个完整的 Java 版本 GoLand Tool Window 插件示例。
+    ]]></description>
+
+    <!-- 依赖基础平台模块 -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <!-- 注册 Tool Window 扩展 -->
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="工具箱"
+                    secondary="false"
+                    anchor="right"
+                    icon="/META-INF/icon.svg"
+                    factoryClass="org.plugin.window.WindowFactory"/>
+
+        <!-- 定时提醒：持久化配置、调度器、设置页、通知分组 -->
+        <applicationService serviceImplementation="org.plugin.window.reminder.ReminderSettings"/>
+        <applicationService serviceImplementation="org.plugin.window.reminder.ReminderScheduler"/>
+        <applicationConfigurable instance="org.plugin.window.reminder.ReminderConfigurable"
+                                 displayName="工具箱提醒"
+                                 id="org.plugin.window.reminder"/>
+        <notificationGroup id="工具箱提醒" displayType="BALLOON"/>
+
+        <!-- 用户资料：头像与名称的持久化配置及设置页 -->
+        <applicationService serviceImplementation="org.plugin.window.settings.UserProfileSettings"/>
+        <applicationConfigurable instance="org.plugin.window.settings.UserProfileConfigurable"
+                                 displayName="工具箱用户资料"
+                                 id="org.plugin.window.settings.userprofile"/>
+
+        <!-- DeepSeek 余额：偏好与余额快照的持久化配置及设置页（API Key 存于 IDE 凭据库） -->
+        <applicationService serviceImplementation="org.plugin.window.settings.DeepSeekSettings"/>
+        <applicationConfigurable instance="org.plugin.window.settings.DeepSeekConfigurable"
+                                 displayName="工具箱 DeepSeek"
+                                 id="org.plugin.window.settings.deepseek"/>
+
+        <!-- 高德天气：API Key 存于 IDE 凭据库，城市信息持久化配置及设置页 -->
+        <applicationService serviceImplementation="org.plugin.window.settings.GaodeSettings"/>
+        <applicationConfigurable instance="org.plugin.window.settings.GaodeConfigurable"
+                                 displayName="工具箱高德地图"
+                                 id="org.plugin.window.settings.gaode"/>
+    </extensions>
+
+    <!-- IDE 启动后启动提醒排程 -->
+    <applicationListeners>
+        <listener class="org.plugin.window.reminder.ReminderStartupListener"
+                  topic="com.intellij.ide.AppLifecycleListener"/>
+    </applicationListeners>
+</idea-plugin>
