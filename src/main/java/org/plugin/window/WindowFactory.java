@@ -4,6 +4,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
+import com.intellij.ui.content.ContentManagerEvent;
+import com.intellij.ui.content.ContentManagerListener;
 import org.jetbrains.annotations.NotNull;
 
 public class WindowFactory implements ToolWindowFactory {
@@ -21,5 +23,15 @@ public class WindowFactory implements ToolWindowFactory {
 
         // 将 Content 添加到 Tool Window 中
         toolWindow.getContentManager().addContent(content);
+
+        // 内容被移除（窗口关闭/IDE 退出）时注销实例，避免设置页重建已关闭的窗口
+        toolWindow.getContentManager().addContentManagerListener(new ContentManagerListener() {
+            @Override
+            public void contentRemoved(@NotNull ContentManagerEvent event) {
+                if (event.getContent() == content) {
+                    MainWindow.unregister(myToolWindow);
+                }
+            }
+        });
     }
 }

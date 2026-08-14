@@ -43,6 +43,12 @@
         <applicationConfigurable instance="org.plugin.window.settings.GaodeConfigurable"
                                  displayName="工具箱高德地图"
                                  id="org.plugin.window.settings.gaode"/>
+
+        <!-- 看板开关：控制工具窗口展示哪些卡片 -->
+        <applicationService serviceImplementation="org.plugin.window.settings.PanelSettings"/>
+        <applicationConfigurable instance="org.plugin.window.settings.PanelConfigurable"
+                                 displayName="工具箱看板"
+                                 id="org.plugin.window.settings.panels"/>
     </extensions>
 
     <!-- IDE 启动后启动提醒排程 -->

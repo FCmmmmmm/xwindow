@@ -131,6 +131,13 @@ public class WorkProgressPanel {
         bar.setProgress(progress, mode, settings.getProgressSegments());
     }
 
+    /** 停掉内部闪烁定时器，供面板被移除/替换时调用，避免残留后台刷新。 */
+    public void dispose() {
+        if (bar != null) {
+            bar.stopBlink();
+        }
+    }
+
     /** 从给定时刻推算下一个工作日的开工点（用于周末圣人模式倒计时）。 */
     private static LocalDateTime nextWorkStart(LocalDateTime now, LocalTime startTime) {
         LocalDate date = now.toLocalDate();
@@ -201,6 +208,10 @@ public class WorkProgressPanel {
             this.mode = mode;
             this.segments = Math.max(MIN_SEGMENTS, segments);
             repaint();
+        }
+
+        void stopBlink() {
+            blinkTimer.stop();
         }
 
         @Override
