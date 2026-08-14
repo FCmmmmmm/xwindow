@@ -14,6 +14,12 @@
 - 定时提醒（Cron 调度，支持持久化与通知）
 - 工作进度、音乐频谱/可视化、篝火等趣味面板
 
+## 界面预览
+
+![主界面](docs/images/home.png)
+
+![设置页](docs/images/setting.png)
+
 ## 环境要求
 
 - JDK 21
