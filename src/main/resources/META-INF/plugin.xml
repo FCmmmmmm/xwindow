@@ -38,7 +38,7 @@
                                  displayName="工具箱 DeepSeek"
                                  id="org.plugin.window.settings.deepseek"/>
 
-        <!-- 高德天气：API Key 存于 IDE 凭据库，城市信息持久化配置及设置页 -->
+        <!-- 高德天气：API Key 与城市信息持久化配置及设置页 -->
         <applicationService serviceImplementation="org.plugin.window.settings.GaodeSettings"/>
         <applicationConfigurable instance="org.plugin.window.settings.GaodeConfigurable"
                                  displayName="工具箱高德地图"

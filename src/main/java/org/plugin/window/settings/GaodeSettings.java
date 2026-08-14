@@ -8,9 +8,9 @@ import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 应用级持久化配置，保存高德天气卡片的城市信息，存储于 IDE 配置目录的 xwindow-gaode.xml。
+ * 应用级持久化配置，保存高德天气卡片的 API Key 与城市信息，存储于 IDE 配置目录的 xwindow-gaode.xml。
  * <p>
- * 注意：API Key <b>不</b>存在这里，见 {@link GaodeApiKeyStore}。
+ * API Key 也存在这里（本地 IDE 配置，不随源码分发），凭据库仅作为兼容兜底，见 {@link GaodeApiKeyStore}。
  */
 @State(
         name = "XWindowGaodeSettings",
@@ -23,6 +23,9 @@ public class GaodeSettings implements PersistentStateComponent<GaodeSettings> {
 
     /** 卡片上显示的城市名称。 */
     public String cityName = "北京";
+
+    /** 高德 Web 服务 API Key。 */
+    public String apiKey = "";
 
     public static GaodeSettings getInstance() {
         return ApplicationManager.getApplication().getService(GaodeSettings.class);
@@ -52,5 +55,13 @@ public class GaodeSettings implements PersistentStateComponent<GaodeSettings> {
 
     public void setCityName(String cityName) {
         this.cityName = cityName;
+    }
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
     }
 }

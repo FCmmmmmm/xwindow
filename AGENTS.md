@@ -47,5 +47,5 @@ Data flow for a refreshing card: `MainWindow` Timer → `Panel.GenerateDisplayTe
 
 ## Notes
 
-- The AMap API key is not hardcoded: it is stored in the IDE credential store via `GaodeApiKeyStore` and configured in Settings → 工具箱高德地图; the city code defaults to Beijing Dongcheng (`110101`) and is configurable via `GaodeSettings`.
+- The AMap API key is not hardcoded: it is persisted in `GaodeSettings` (local IDE config `xwindow-gaode.xml`, credential store used as a best-effort fallback) and configured in Settings → 工具箱高德地图; the city code defaults to Beijing Dongcheng (`110101`) and is configurable via `GaodeSettings`.
 - `Gson` is used by the `Weather` model but is not declared as a dependency — it resolves from the bundled IntelliJ platform libraries.
