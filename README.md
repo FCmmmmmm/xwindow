@@ -16,9 +16,16 @@
 
 ## 界面预览
 
-![主界面](docs/images/home.png)
-
-![设置页](docs/images/setting.png)
+<table>
+  <tr>
+    <td align="center"><img src="docs/images/home.png" alt="主界面" height="480"></td>
+    <td align="center"><img src="docs/images/setting.png" alt="设置页" height="480"></td>
+  </tr>
+  <tr>
+    <td align="center">主界面</td>
+    <td align="center">设置页</td>
+  </tr>
+</table>
 
 ## 环境要求
 
