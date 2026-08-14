@@ -86,8 +86,8 @@ public class GaodeConfigurable implements Configurable {
         s.setCityName(cityNameField.getText().trim());
         if (!key.isEmpty() && !credentialStoreOk) {
             keychainWarningLabel.setText(
-                    "<html>⚠ 密钥已保存到插件配置文件，但系统钥匙串写入被拒绝（授权弹窗可能被忽略）。<br>"
-                            + "如需使用系统钥匙串：重启 IDE 后重新保存，并在弹窗中选择「始终允许」。</html>");
+                    "<html>⚠ 钥匙串写入被拒绝，密钥<b>未保存</b>。<br>"
+                            + "请重启 IDE 后重新保存，并在 macOS 弹窗中选择「始终允许」。</html>");
             keychainWarningLabel.setVisible(true);
         } else {
             keychainWarningLabel.setVisible(false);

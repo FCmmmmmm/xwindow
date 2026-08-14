@@ -7,10 +7,10 @@ import com.intellij.ide.passwordSafe.PasswordSafe;
 /**
  * 高德（AMap）Web 服务 API Key 的安全存储封装。
  * <p>
- * 密钥优先持久化到 {@link GaodeSettings}（本地 IDE 配置 xwindow-gaode.xml），保证在
- * 凭据库不可用时（如 macOS 钥匙串未授权）也能正常保存；
- * 同时尽力写入 IDE 的 {@link PasswordSafe}（macOS 钥匙串 / Windows 凭据库）作为兼容兜底，
- * 读取时设置文件优先，凭据库用于读取历史保存过的值。
+ * 密钥只存 IDE 的 {@link PasswordSafe}（macOS 钥匙串 / Windows 凭据库 / KeePass），
+ * 不会明文写入 xwindow-*.xml 配置文件。
+ * <p>
+ * 钥匙串授权被拒绝时保存会失败，写入前会验证写回，调用方应把失败提示给用户，避免静默丢数据。
  */
 public final class GaodeApiKeyStore {
 
@@ -28,15 +28,11 @@ public final class GaodeApiKeyStore {
      * 读取已保存的密钥，未配置时返回空串。
      */
     public static String getKey() {
-        String fromSettings = GaodeSettings.getInstance().getApiKey();
-        if (fromSettings != null && !fromSettings.isBlank()) {
-            return fromSettings.trim();
-        }
         try {
             String password = PasswordSafe.getInstance().getPassword(attributes());
             return password == null ? "" : password;
         } catch (Throwable ignored) {
-            // 凭据库不可用时静默降级，不影响读取
+            // 凭据库不可用时按未配置处理
             return "";
         }
     }
@@ -44,14 +40,10 @@ public final class GaodeApiKeyStore {
     /**
      * 保存密钥；传入空值等同于清除。
      *
-     * @return 凭据库写入是否成功（验证写回）；失败时 key 已兜底保存到设置文件，
-     *         调用方应据此提示用户授权钥匙串
+     * @return 凭据库写入是否成功（验证写回），调用方应据此提示用户授权钥匙串
      */
     public static boolean setKey(String key) {
         String normalized = key == null ? "" : key.trim();
-        // 主存储：设置文件，保证持久化
-        GaodeSettings.getInstance().setApiKey(normalized);
-        // 兜底：尽力写入凭据库，失败不影响保存
         try {
             if (normalized.isEmpty()) {
                 PasswordSafe.getInstance().set(attributes(), null);
