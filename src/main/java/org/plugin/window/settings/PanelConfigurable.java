@@ -24,6 +24,7 @@ public class PanelConfigurable implements Configurable {
     private JBCheckBox workProgressBox;
     private JBCheckBox weatherBox;
     private JBCheckBox deepSeekBox;
+    private JBCheckBox fortuneBox;
     private JBCheckBox poemBox;
     private JBCheckBox fireBox;
     private JBCheckBox musicBox;
@@ -41,6 +42,7 @@ public class PanelConfigurable implements Configurable {
         workProgressBox = new JBCheckBox("今日搬砖进度卡片");
         weatherBox = new JBCheckBox("天气卡片");
         deepSeekBox = new JBCheckBox("DeepSeek 余额卡片");
+        fortuneBox = new JBCheckBox("今日指引卡片（点击弹窗，调用大模型生成今日吉凶；产生 API 费用）");
         poemBox = new JBCheckBox("用户/诗歌卡片");
         fireBox = new JBCheckBox("赛博篝火卡片");
         musicBox = new JBCheckBox("音乐频谱卡片");
@@ -57,6 +59,7 @@ public class PanelConfigurable implements Configurable {
                 .addComponent(workProgressBox)
                 .addComponent(weatherBox)
                 .addComponent(deepSeekBox)
+                .addComponent(fortuneBox)
                 .addComponent(poemBox)
                 .addComponent(fireBox)
                 .addComponent(musicBox)
@@ -76,6 +79,7 @@ public class PanelConfigurable implements Configurable {
                 || workProgressBox.isSelected() != s.isWorkProgressEnabled()
                 || weatherBox.isSelected() != s.isWeatherEnabled()
                 || deepSeekBox.isSelected() != s.isDeepSeekEnabled()
+                || fortuneBox.isSelected() != s.isFortuneEnabled()
                 || poemBox.isSelected() != s.isPoemEnabled()
                 || fireBox.isSelected() != s.isFireEnabled()
                 || musicBox.isSelected() != s.isMusicEnabled();
@@ -89,6 +93,7 @@ public class PanelConfigurable implements Configurable {
         s.setWorkProgressEnabled(workProgressBox.isSelected());
         s.setWeatherEnabled(weatherBox.isSelected());
         s.setDeepSeekEnabled(deepSeekBox.isSelected());
+        s.setFortuneEnabled(fortuneBox.isSelected());
         s.setPoemEnabled(poemBox.isSelected());
         s.setFireEnabled(fireBox.isSelected());
         s.setMusicEnabled(musicBox.isSelected());
@@ -105,6 +110,7 @@ public class PanelConfigurable implements Configurable {
         workProgressBox.setSelected(s.isWorkProgressEnabled());
         weatherBox.setSelected(s.isWeatherEnabled());
         deepSeekBox.setSelected(s.isDeepSeekEnabled());
+        fortuneBox.setSelected(s.isFortuneEnabled());
         poemBox.setSelected(s.isPoemEnabled());
         fireBox.setSelected(s.isFireEnabled());
         musicBox.setSelected(s.isMusicEnabled());
@@ -117,6 +123,7 @@ public class PanelConfigurable implements Configurable {
         workProgressBox = null;
         weatherBox = null;
         deepSeekBox = null;
+        fortuneBox = null;
         poemBox = null;
         fireBox = null;
         musicBox = null;

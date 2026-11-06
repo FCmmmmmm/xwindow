@@ -1,5 +1,6 @@
 package org.plugin.window;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
@@ -8,6 +9,7 @@ import org.plugin.window.panel.ClockPanel;
 import org.plugin.window.panel.UiFactory;
 import org.plugin.window.panel.DeepSeekPanel;
 import org.plugin.window.panel.FirePanel;
+import org.plugin.window.panel.FortunePanel;
 import org.plugin.window.panel.MusicSpectrumPanel;
 import org.plugin.window.panel.MusicVisualizerPanel;
 import org.plugin.window.panel.PoemPanel;
@@ -30,6 +32,7 @@ public class MainWindow {
     private static final int DEEPSEEK_REFRESH_INTERVAL = 1800000; // 30分钟（余额变化慢，不必频繁请求）
 
     private final JPanel Layout; //当前页面布局容器
+    private final Project project; //宿主项目，供「今日指引」弹窗作父级使用
     private final ExecutorService executor = Executors.newSingleThreadExecutor(); //异步线程调度器
     /** 当前所有已打开的工具窗口实例，设置页应用后统一实时重建。 */
     private static final List<MainWindow> INSTANCES = new CopyOnWriteArrayList<>();
@@ -49,9 +52,11 @@ public class MainWindow {
     private MusicVisualizerPanel MusicVisualizerPanel;
     private MusicSpectrumPanel MusicSpectrumPanel;
     private DeepSeekPanel DeepSeekPanel;
+    private FortunePanel FortunePanel;
 
 
-    public MainWindow() {
+    public MainWindow(Project project) {
+        this.project = project;
         Layout = new JBPanel<>(new BorderLayout());
         // 不透明背景：用主题标准面板背景色盖住 IDE 背景图，整窗保持统一的固实底色
         Layout.setOpaque(true);
@@ -113,6 +118,13 @@ public class MainWindow {
             this.WeatherPanel = new WeatherPanel();
             rebuilt.add(this.WeatherPanel.GenerateWeatherCard());
             rebuilt.add(Box.createVerticalStrut(20));
+        }
+
+        // 今日指引入口（大模型占断，点击弹窗；无定时器，完全由用户触发）
+        if (settings.isFortuneEnabled()) {
+            this.FortunePanel = new FortunePanel(this.project);
+            rebuilt.add(this.FortunePanel.GenerateFortuneCard());
+            rebuilt.add(Box.createVerticalStrut(15));
         }
 
         // DeepSeek 余额卡片（卡片内自带一键查询按钮）
@@ -180,6 +192,7 @@ public class MainWindow {
         this.WeatherPanel = null;
         this.PoemPanel = null;
         this.DeepSeekPanel = null;
+        this.FortunePanel = null;
     }
 
     /** 设置页保存后调用：重建所有已打开的工具窗口，实时生效。 */

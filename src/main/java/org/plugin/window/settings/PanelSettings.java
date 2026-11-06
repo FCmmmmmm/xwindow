@@ -33,6 +33,9 @@ public class PanelSettings implements PersistentStateComponent<PanelSettings> {
     /** DeepSeek 余额卡片。 */
     public boolean deepSeekEnabled = true;
 
+    /** 今日指引卡片（大模型占断，点击弹窗，默认开启：只有点击才产生调用费用）。 */
+    public boolean fortuneEnabled = true;
+
     /** 用户/诗歌卡片。 */
     public boolean poemEnabled = true;
 
@@ -94,6 +97,14 @@ public class PanelSettings implements PersistentStateComponent<PanelSettings> {
 
     public void setDeepSeekEnabled(boolean deepSeekEnabled) {
         this.deepSeekEnabled = deepSeekEnabled;
+    }
+
+    public boolean isFortuneEnabled() {
+        return fortuneEnabled;
+    }
+
+    public void setFortuneEnabled(boolean fortuneEnabled) {
+        this.fortuneEnabled = fortuneEnabled;
     }
 
     public boolean isPoemEnabled() {

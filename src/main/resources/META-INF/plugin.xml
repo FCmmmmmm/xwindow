@@ -49,6 +49,12 @@
         <applicationConfigurable instance="org.plugin.window.settings.PanelConfigurable"
                                  displayName="工具箱看板"
                                  id="org.plugin.window.settings.panels"/>
+
+        <!-- 系统日历：是否通过 osascript 读取 macOS 日历作为日程来源，及授权自检 -->
+        <applicationService serviceImplementation="org.plugin.window.calendar.CalendarSettings"/>
+        <applicationConfigurable instance="org.plugin.window.calendar.CalendarConfigurable"
+                                 displayName="工具箱日历"
+                                 id="org.plugin.window.calendar"/>
     </extensions>
 
     <!-- IDE 启动后启动提醒排程 -->

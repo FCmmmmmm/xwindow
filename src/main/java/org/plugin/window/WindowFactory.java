@@ -13,7 +13,7 @@ public class WindowFactory implements ToolWindowFactory {
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull com.intellij.openapi.wm.ToolWindow toolWindow) {
         // 实例化我们自己写的 UI 界面
-        MainWindow myToolWindow = new MainWindow();
+        MainWindow myToolWindow = new MainWindow(project);
 
         // 获取 ContentFactory
         ContentFactory contentFactory = ContentFactory.getInstance();
