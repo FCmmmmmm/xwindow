@@ -40,3 +40,4 @@ bin/
 
 ### Local AI tooling ###
 .claude/
+.workbuddy/

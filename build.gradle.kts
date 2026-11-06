@@ -31,8 +31,9 @@ java {
 
 tasks {
     patchPluginXml {
-        // 兼容的 IDE 版本范围
+        // 只声明下限：从 233 起的所有新版本 IDE 都允许加载
         sinceBuild.set("233")
-        untilBuild.set("262.*")
+        // 显式置空 = 不写入 until-build 属性（不再有版本上限），无需随 IDE 发版手动改
+        untilBuild.set(provider { null })
     }
 }
